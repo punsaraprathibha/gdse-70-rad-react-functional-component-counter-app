@@ -1,149 +1,10 @@
-# 🚀 React Counter App (Functional Components)
-Getting some hands-on experience about React Hooks, State and Props Management, using functional components
+# 🚀 React Counter App (useReducer() & useContext())
+Getting some hands-on experience about `useReducer()` & `useContext()` hooks in React.
 
-1. Firstly let's clean up the current `App.tsx` file content our project.
-2. Let's define `App.tsx` fie's structure as a React functional component like this.
- ```typescript jsx
-import React from 'react';
-import './App.css';
-
-function App() {
-    return (
-        <div className="app">
-            <h1>This is App Component!</h1>
-        </div>
-    );
-}
-
-export default App;
-```
-In `App.css`:
-```css
-.app {
-  background-color: blue;
-}
-```
-
-3. Here we're going to create a counter app. So, we need to create a new package called `counter` and a new component called `Counter.tsx` inside it.
+1. Firstly, let's clean up the code like below.
 ```typescript jsx
-import React from 'react';
-import './Counter.css';
-
-function Counter() {
-   return (
-      <div className="counter">
-         <h1>This is Counter App Component!</h1>
-      </div>
-   );
-}
-
-export default Counter;
-```
-In `Counter.css`
-```css
-.counter {
-  background-color: red;
-}
-```
-
-Define `Counter` inside the div in `App.tsx` in order to render it in the browser:
-```typescript jsx
-function App() {
-    return (
-        <Counter />
-    );
-}
-```
-
-4. Now let's design the content of the counter app inside render function.
-```typescript jsx
-
-import React from 'react';
-import './Counter.css';
-
-function Counter() {
-    return (
-        <div className="container">
-            <h1>React Counter (Class Component)</h1>
-            <h2>Count: 0</h2>
-            <div>
-                <button className="button">+</button>
-                <button className="button">-</button>
-            </div>
-        </div>
-    );
-}
-
-export default Counter;
-```
-
-In `Counter.css`
-```css
-.container {
-    text-align: center;
-    padding: 2rem;
-    font-family: Arial, serif;
-    border: 2px solid #0e0e0e;
-    border-radius: 10px;
-    width: 300px;
-    margin: 2rem auto;
-    background-color: #d9d5d5;
-}
-
-.button {
-    font-size: 1.5rem;
-    margin: 0.5rem;
-    padding: 0.5rem 1rem;
-    background-color: lightblue;
-}
-```
-
-5. Now let's understand what are the steps that UI renders (useEffect) (React Hook) in React app.
-```typescript jsx
-import React, {useState, useEffect, useRef} from "react";
-import './Counter.css';
-
-function Counter(props: any) {
-
-    // Mimics componentDidMount
-    useEffect(() => {
-        alert("componentDidMount: Component has been mounted! Received Props: " + props.data);
-        console.log("componentDidMount: Component has been mounted");
-
-        // Mimics componentWillUnmount
-        return () => {
-            alert("componentWillUnmount: Component is being removed");
-            console.log("componentWillUnmount: Component is being removed");
-        };
-    }, []); // Empty dependency array = run only once on mount
-
-    return (
-        <div className="container">
-            <h1>React Counter (Functional Component)</h1>
-            <h2>Count: 0</h2>
-            <div>
-                <button className="button">+</button>
-                <button className="button">-</button>
-            </div>
-        </div>
-    );
-}
-
-export default Counter;
-```
-
-Here, you need to pass the props in `App.tsx`:
-```typescript jsx
-return (
-    <div className="App">
-        <Counter data={"Hello"}/>
-    </div>
-);
-```
-
-6. Let's have a look at the how to manage UI updates using same React Hook `useEffect` (With state updates using `useState`)
-```typescript jsx
-import React, {useState, useEffect, useRef} from "react";
+import React from "react";
+import {useReducer} from "react";
 import './Counter.css';
 
 type CounterProps = {
@@ -151,42 +12,14 @@ type CounterProps = {
 };
 
 function Counter(props: CounterProps) {
-    const [count, setCount] = useState(0);
-    const prevCountRef = useRef<number | null>(null);
-
-    // Mimics componentDidMount
-    useEffect(() => {
-        alert("componentDidMount: Component has been mounted! Received Props: " + props.data);
-        console.log("componentDidMount: Component has been mounted");
-
-        // Mimics componentWillUnmount
-        return () => {
-            alert("componentWillUnmount: Component is being removed");
-            console.log("componentWillUnmount: Component is being removed");
-        };
-    }, []); // Empty dependency array = run only once on mount
-
-    // Mimics componentDidUpdate
-    useEffect(() => {
-        if (prevCountRef.current !== null && prevCountRef.current !== count) {
-            alert("componentDidUpdate: Count has been updated");
-            console.log("componentDidUpdate: Count has been updated");
-        }
-        prevCountRef.current = count;
-    }, [count]); // Runs when 'count' changes
-
-    const increment = () =>
-        setCount((prev) => prev + 1);
-    const decrement = () =>
-        setCount((prev) => prev - 1);
 
     return (
         <div className="container">
-            <h1>React Counter (Functional Component)</h1>
-            <h2>Count: {count}</h2>
+            <h1>React Counter (Using useReducer())</h1>
+            <h2>Count: 0</h2>
             <div>
-                <button onClick={increment} className="button">+</button>
-                <button onClick={decrement} className="button">-</button>
+                <button className="button">+</button>
+                <button className="button">-</button>
             </div>
         </div>
     );
@@ -194,11 +27,332 @@ function Counter(props: CounterProps) {
 
 export default Counter;
 ```
-
-Define props in `Counter.tsx` as optional if it's not mandatory:
-
+2. Now let's see how to use useReducer() for state management.
+3. Firstly let's define State and Action objects.
 ```typescript jsx
+import React from "react";
+import {useReducer} from "react";
+import './Counter.css';
+
 type CounterProps = {
     data?: any;
+};
+
+interface State {
+    count: number;
+    error: string | null;
+}
+
+interface Action {
+    type: 'increment' | 'decrement';
+}
+
+function Counter(props: CounterProps) {
+
+    return (
+        <div className="container">
+            <h1>React Counter (Using useReducer())</h1>
+            <h2>Count: 0</h2>
+            <div>
+                <button className="button">+</button>
+                <button className="button">-</button>
+            </div>
+        </div>
+    );
+}
+
+export default Counter;
+```
+4. Now let's define useReducer() react hook.
+```typescript jsx
+import React from "react";
+import {useReducer} from "react";
+import './Counter.css';
+
+type CounterProps = {
+    data?: any;
+};
+
+interface State {
+    count: number;
+    error: string | null;
+}
+
+interface Action {
+    type: 'increment' | 'decrement';
+}
+
+function Counter(props: CounterProps) {
+
+    const [state, dispatch] = useReducer(
+        reducer, {
+            count: 0,
+            error: null
+        }
+    );
+
+    return (
+        <div className="container">
+            <h1>React Counter (Using useReducer())</h1>
+            <h2>Count: 0</h2>
+            <div>
+                <button className="button">+</button>
+                <button className="button">-</button>
+            </div>
+        </div>
+    );
+}
+
+export default Counter;
+```
+5. Now let's define the reducer() method.
+```typescript jsx
+import React from "react";
+import {useReducer} from "react";
+import './Counter.css';
+
+type CounterProps = {
+    data?: any;
+};
+
+interface State {
+    count: number;
+    error: string | null;
+}
+
+interface Action {
+    type: 'increment' | 'decrement';
+}
+
+function reducer(state: State, action: Action) {
+    const {type} = action;
+    switch (type) {
+        case "increment": {
+            return {...state, count: state.count + 1}
+        }
+        case "decrement": {
+            return {...state, count: state.count - 1}
+        }
+        default:
+            return state;
+    }
+}
+
+function Counter(props: CounterProps) {
+
+    const [state, dispatch] = useReducer(
+        reducer, {
+            count: 0,
+            error: null
+        }
+    );
+
+    return (
+        <div className="container">
+            <h1>React Counter (Using useReducer())</h1>
+            <h2>Count: 0</h2>
+            <div>
+                <button className="button">+</button>
+                <button className="button">-</button>
+            </div>
+        </div>
+    );
+}
+
+export default Counter;
+```
+6. Now let's call the dispatch method and update the count in our counter app.
+```typescript jsx
+import React from "react";
+import {useReducer} from "react";
+import './Counter.css';
+
+type CounterProps = {
+    data?: any;
+};
+
+interface State {
+    count: number;
+    error: string | null;
+}
+
+interface Action {
+    type: 'increment' | 'decrement';
+}
+
+function reducer(state: State, action: Action) {
+    const {type} = action;
+    switch (type) {
+        case "increment": {
+            return {...state, count: state.count + 1}
+        }
+        case "decrement": {
+            return {...state, count: state.count - 1}
+        }
+        default:
+            return state;
+    }
+}
+
+function Counter(props: CounterProps) {
+
+    const [state, dispatch] = useReducer(
+        reducer, {
+            count: 0,
+            error: null
+        }
+    );
+
+    return (
+        <div className="container">
+            <h1>React Counter (Using useReducer())</h1>
+            <h2>Count: {state.count}</h2>
+            <div>
+                <button onClick={()=> dispatch({type: 'increment'})} className="button">+</button>
+                <button onClick={()=> dispatch({type: 'decrement'})} className="button">-</button>
+            </div>
+        </div>
+    );
+}
+
+export default Counter;
+```
+7. Now let's define some extra validation and display the necessary error messages.
+```css
+.error {
+    color: red;
+}
+```
+```typescript jsx
+import React from "react";
+import {useReducer} from "react";
+import './Counter.css';
+
+type CounterProps = {
+    data?: any;
+};
+
+interface State {
+    count: number;
+    error: string | null;
+}
+
+interface Action {
+    type: 'increment' | 'decrement';
+}
+
+function reducer(state: State, action: Action) {
+    const {type} = action;
+    switch (type) {
+        case "increment": {
+            const newCount = state.count + 1;
+            const hasError = newCount > 5;
+            return {...state,
+                count: hasError ? state.count : newCount,
+                error: hasError ? 'Maximum Reached' : null
+            }
+        }
+        case "decrement": {
+            const newCount = state.count - 1;
+            const hasError = newCount < 0;
+            return {...state,
+                count: hasError ? state.count : newCount,
+                error: hasError ? 'Minimum Reached' : null
+            }
+        }
+        default:
+            return state;
+    }
+}
+
+function Counter(props: CounterProps) {
+
+    const [state, dispatch] = useReducer(
+        reducer, {
+            count: 0,
+            error: null
+        }
+    );
+
+    return (
+        <div className="container">
+            <h1>React Counter (Using useReducer())</h1>
+            <h2>Count: {state.count}</h2>
+            {state.error && <span className="error">{state.error}</span>}
+            <div>
+                <button onClick={()=> dispatch({type: 'increment'})} className="button">+</button>
+                <button onClick={()=> dispatch({type: 'decrement'})} className="button">-</button>
+            </div>
+        </div>
+    );
+}
+
+export default Counter;
+```
+8. Now let's see how to use `useContext()` for props management.
+9. For that, let's create a new component called `Message`.
+```typescript jsx
+type MessageProps = {
+    data: any;
+}
+
+export const Message = (props: MessageProps) => {
+    return (
+        <div>
+            <br/><br/>
+            {props.data}
+        </div>
+    );
+};
+```
+10. Now let's import it in `Counter.tsx`.
+```typescript jsx
+<Message data={props.data}/>
+```
+11. Also, let's update the `App.tsx` like below.
+```typescript jsx
+const message = "Hello";
+
+<Counter data={message}/>
+```
+12. So, here props being passed through each child component in order to use it in the last component (We call this as props drilling).
+13. Now let's try to work with `createContext()` and `useContext()` react Hooks.
+14. Please define following react hook inside `App.tsx` and wrap the App with it and no longer need to pass props to `Counter`.
+```typescript jsx
+import React, {createContext} from 'react';
+import './App.css';
+import Counter from "./Counter/Counter";
+
+export const MessageContext = createContext('');
+
+function App() {
+
+    const message = "Hello There";
+
+    return (
+        <MessageContext.Provider value={message}>
+            <Counter/>
+        </MessageContext.Provider>
+    );
+}
+
+export default App;
+```
+15. Inside `Counter.tsx` also, please remove all the props related changes and no need to pass props to `Message.tsx` anymore.
+16. Inside `Message.tsx` also, you don't need to define props. Remove all of them.
+17. Now inside `Message.tsx`, you can use `useContext()` React Hook and access the `MessageContext` to get the message.
+```typescript jsx
+import {useContext} from "react";
+import {MessageContext} from "../App";
+
+export const Message = () => {
+    const message = useContext(MessageContext);
+
+    return (
+        <div>
+            <br/><br/>
+            {message}
+        </div>
+    );
 };
 ```
