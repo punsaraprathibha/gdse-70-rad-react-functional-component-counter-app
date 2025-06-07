@@ -1,9 +1,5 @@
 import {useContext} from "react";
-import {MessageContext} from "../App";
-
-type MessageProps = {
-    data: any;
-}
+import {MessageContext} from "../../App";
 export function Message() {
     const message
         = useContext(MessageContext);
