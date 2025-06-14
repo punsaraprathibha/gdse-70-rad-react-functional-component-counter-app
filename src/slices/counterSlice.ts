@@ -15,9 +15,7 @@ export const incrementAsync
     = createAsyncThunk(
     'counter/incrementAsync',
     async (count: number) => {
-        await new Promise(
-            resolve =>
-                setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
         return count;
     }
 )
@@ -55,14 +53,10 @@ export const counterSlice = createSlice({
         }).addCase(incrementAsync.fulfilled,
             (state,
              action) => {
-            state.count += action.payload; // Increment
-                // current count
-                // by the value provided
+            state.count += action.payload; // Increment current count by the value provided
         })
     }
 });
 
-export const { increment,
-    decrement
-} = counterSlice.actions; // Expert actions separately as one by one
+export const { increment, decrement} = counterSlice.actions; // Expert actions separately as one by one
 export default counterSlice.reducer; // Export reducer as default
