@@ -1,8 +1,6 @@
 import {combineReducers} from "redux"; // It comes from redux core package
-import counterReducer
-    from '../slices/counterSlice';
-export const rootReducer
-    = combineReducers({
+import counterReducer from '../slices/counterSlice';
+export const rootReducer = combineReducers({
     counter: counterReducer,
     // TODO - Add More Reducers here
 });
