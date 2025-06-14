@@ -32,31 +32,20 @@ export const counterSlice
                 state.error = null;
             }
         },
+        decrement(state) {
+            const newCount = state.count - 1;
+            const hasError = newCount < 0;
+            if (hasError) {
+                state.error = "Minimum count Reached";
+            } else {
+                state.count = newCount;
+                state.error = null;
+            }
+        }
     }
 });
 
-// export function counterSlice(state = initialState, action: CounterAction) {
-//     const {type} = action;
-//     switch (type) {
-//         case "increment": {
-//             const newCount = state.count + 1;
-//             const hasError = newCount > 5;
-//             return {
-//                 ...state,
-//                 count: hasError ? state.count : newCount,
-//                 error: hasError ? 'Maximum value Reached' : null
-//             }
-//         }
-//         case "decrement": {
-//             const newCount = state.count - 1;
-//             const hasError = newCount < 0;
-//             return {
-//                 ...state,
-//                 count: hasError ? state.count : newCount,
-//                 error: hasError ? 'Minimum count Reached' : null
-//             }
-//         }
-//         default:
-//             return state;
-//     }
-// }
+export const { increment,
+    decrement
+} = counterSlice.actions; // Expert actions separately as one by one
+export default counterSlice.reducer; // Export reducer as default
