@@ -16,7 +16,7 @@ npm install redux react-redux
 | `redux`       | The core Redux library (store, actions, reducers, etc.)                     |
 | `react-redux` | Provides React bindings like `<Provider>`, `useDispatch()`, `useSelector()` |
 
-3. As per the next step, let's create a new folder called `reducers` and create a file inside that called `counterReducer.ts` and extract out our reducer functionality to there.
+3. As per the next step, let's create a new folder called `reducers` and create a file inside that called `counterSlice.ts` and extract out our reducer functionality to there.
 ```typescript
 export interface CounterState {
     count: number;
@@ -32,7 +32,7 @@ const initialState: CounterState = {
     error: null,
 };
 
-export const counterReducer = (state = initialState, action: CounterAction) => {
+export const counterSlice = (state = initialState, action: CounterAction) => {
     switch (action.type) {
         case 'increment':
             const newCountInc = state.count + 1;

@@ -1,7 +1,7 @@
 import {createStore} from "redux";
-import {counterReducer}
-    from "../reducers/counterReducer";
+import {counterSlice}
+    from "../slices/counterSlice";
 export const store
-    = createStore(counterReducer);
+    = createStore(counterSlice);
 export type CounterState =
-    ReturnType<typeof counterReducer>
+    ReturnType<typeof counterSlice>

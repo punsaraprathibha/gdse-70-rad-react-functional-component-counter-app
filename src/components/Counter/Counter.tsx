@@ -1,7 +1,7 @@
 import './Counter.css';
 import {useReducer} from "react";
 import {Message} from "../Message/Message";
-import {counterReducer} from "../../reducers/counterReducer";
+import {counterSlice} from "../../slices/counterSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {CounterState} from "../../store/store";
 import {decrement, increment} from "../../actions/counterActions";
