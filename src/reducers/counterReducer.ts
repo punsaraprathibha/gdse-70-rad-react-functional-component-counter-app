@@ -4,13 +4,18 @@ export interface CounterState {
     error: string | null
 }
 
+const initialState: CounterState = {
+    count: 0,
+    error: null
+}
+
 // Define the actions managed within
 // the counter app
 interface CounterAction {
     type: 'increment' | 'decrement'
 }
 
-export function counterReducer(state: CounterState, action: CounterAction) {
+export function counterReducer(state = initialState, action: CounterAction) {
     const {type} = action;
     switch (type) {
         case "increment": {
