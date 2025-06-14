@@ -5,8 +5,7 @@ import {createContext} from "react";
 import {Provider} from "react-redux";
 import {store} from "./store/store";
 
-export const MessageContext
-    = createContext('');
+export const MessageContext = createContext('');
 
 function App() {
     const message = "Hello There";
