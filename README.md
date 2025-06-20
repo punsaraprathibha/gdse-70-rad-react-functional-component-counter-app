@@ -27,12 +27,7 @@ interface CounterAction {
     type: 'increment' | 'decrement';
 }
 
-const initialState: CounterState = {
-    count: 0,
-    error: null,
-};
-
-export const counterReducer = (state = initialState, action: CounterAction) => {
+export const counterReducer = (state: CounterState, action: CounterAction) => {
     switch (action.type) {
         case 'increment':
             const newCountInc = state.count + 1;
